@@ -7,14 +7,14 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type TMDBConfig struct {
+type tMDBConfig struct {
 	APIKey          string
 	ReadAccessToken string
 }
 
 type env struct {
 	PORT       string
-	TMDBConfig *TMDBConfig
+	TMDBConfig tMDBConfig
 }
 
 var Cfg *env
@@ -39,7 +39,7 @@ func Init() error {
 
 		Cfg = &env{
 			PORT: p,
-			TMDBConfig: &TMDBConfig{
+			TMDBConfig: tMDBConfig{
 				APIKey:          os.Getenv("TMDB_API_KEY"),
 				ReadAccessToken: os.Getenv("TMDB_READ_ACCESS_TOKEN"),
 			},

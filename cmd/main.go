@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,15 +15,16 @@ func main() {
 		panic(err)
 	}
 
-	mcpServer := mcp.NewServer(&mcp.Implementation{
+	ms := mcp.NewServer(&mcp.Implementation{
 		Name:    "A films server for Model Context Protocol",
 		Version: "v1",
 	}, nil)
 
 	s := gin.Default()
-	routes.Init(s, mcpServer)
+	routes.Init(s, ms)
 
-	if err := http.ListenAndServe(":"+config.Cfg.PORT, s); err != nil {
+	addr := fmt.Sprintf(":%v", config.Cfg.PORT)
+	if err := http.ListenAndServe(addr, s); err != nil {
 		panic(err)
 	}
 }
