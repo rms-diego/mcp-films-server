@@ -8,18 +8,26 @@ import (
 )
 
 func Init(r *gin.Engine, ms *mcp.Server) {
+	mcphandler := mcpHandler(ms)
+
+	mcproutes := r.Group("/mcp")
+	mcproutes.GET("", func(c *gin.Context) {
+		mcphandler.ServeHTTP(c.Writer, c.Request)
+	})
+	mcproutes.POST("", func(c *gin.Context) {
+		mcphandler.ServeHTTP(c.Writer, c.Request)
+	})
+
 	r.GET("/heath-check", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Server is running"})
 	})
+}
 
-	h := mcp.NewStreamableHTTPHandler(
+func mcpHandler(ms *mcp.Server) http.Handler {
+	return mcp.NewStreamableHTTPHandler(
 		func(req *http.Request) *mcp.Server {
 			return ms
 		},
 		nil,
 	)
-
-	r.Any("/mcp", func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	})
 }

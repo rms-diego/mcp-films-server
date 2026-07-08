@@ -15,13 +15,13 @@ func main() {
 		panic(err)
 	}
 
-	ms := mcp.NewServer(&mcp.Implementation{
+	mcps := mcp.NewServer(&mcp.Implementation{
 		Name:    "A films server for Model Context Protocol",
 		Version: "v1",
 	}, nil)
 
 	s := gin.Default()
-	routes.Init(s, ms)
+	routes.Init(s, mcps)
 
 	addr := fmt.Sprintf(":%v", config.Cfg.PORT)
 	if err := http.ListenAndServe(addr, s); err != nil {
