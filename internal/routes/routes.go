@@ -8,7 +8,7 @@ import (
 )
 
 func Init(r *gin.Engine, ms *mcp.Server) {
-	r.GET("/", func(c *gin.Context) {
+	r.GET("/heath-check", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Server is running"})
 	})
 

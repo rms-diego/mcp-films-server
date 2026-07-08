@@ -18,24 +18,19 @@ const (
 )
 
 type Payload struct {
-	url    string
-	method method
-	body   any
+	Url     string
+	Method  method
+	Body    *any
+	Headers map[string]string
 }
 
-func FetchData[T any](payload Payload) (*T, error) {
-	bodyBytes, err := json.Marshal(payload.body)
+func Fetch[T any](payload Payload) (*T, error) {
+	req, err := formatRequest(payload)
 	if err != nil {
 		return nil, err
 	}
 
 	httpClient := &http.Client{}
-	req := &http.Request{
-		RequestURI: payload.url,
-		Method:     string(payload.method),
-		Body:       io.NopCloser(bytes.NewBuffer(bodyBytes)),
-	}
-
 	res, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -53,4 +48,30 @@ func FetchData[T any](payload Payload) (*T, error) {
 	}
 
 	return &data, nil
+}
+
+func formatRequest(payload Payload) (*http.Request, error) {
+	var bodyBytes []byte
+
+	var err error
+	bodyBytes, err = json.Marshal(payload.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var body io.Reader
+	if bodyBytes != nil {
+		body = bytes.NewReader(bodyBytes)
+	}
+
+	req, err := http.NewRequest(string(payload.Method), payload.Url, body)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range payload.Headers {
+		req.Header.Set(key, value)
+	}
+
+	return req, nil
 }
