@@ -1,2 +1,5 @@
 dev:
-	go run cmd/main.go
+	air
+
+build:
+	go build -o bin/app main.go
