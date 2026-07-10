@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
+	moviemodule "github.com/rms-diego/mcp-films-server/internal/modules/movie"
 )
 
 func InitMCPRoutes(s *gin.Engine, mcps *mcp.Server) {
@@ -22,13 +22,13 @@ func InitMCPRoutes(s *gin.Engine, mcps *mcp.Server) {
 	g.DELETE("", func(c *gin.Context) {
 		h.ServeHTTP(c.Writer, c.Request)
 	})
+
+	moviemodule.Init(mcps)
 }
 
 func mcpHandler(ms *mcp.Server) http.Handler {
 	return mcp.NewStreamableHTTPHandler(
 		func(req *http.Request) *mcp.Server {
-			fmt.Println(req.Header)
-
 			return ms
 		},
 		nil,
