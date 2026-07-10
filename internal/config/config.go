@@ -17,7 +17,7 @@ type env struct {
 	TMDBConfig tMDBConfig
 }
 
-var Cfg *env
+var Env *env
 
 func Init() error {
 	if err := godotenv.Load(); err != nil {
@@ -37,7 +37,7 @@ func Init() error {
 			p = "8080"
 		}
 
-		Cfg = &env{
+		Env = &env{
 			PORT: p,
 			TMDBConfig: tMDBConfig{
 				APIKey:          os.Getenv("TMDB_API_KEY"),

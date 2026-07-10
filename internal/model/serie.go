@@ -13,8 +13,8 @@ type Serie struct {
 	PosterPath       string   `json:"poster_path"`
 	FirstAirDate     string   `json:"first_air_date"`
 	Name             string   `json:"name"`
-	VoteAverage      float32  `json:"vote_average"`
-	VoteCount        float32  `json:"vote_count"`
+	VoteAverage      float64  `json:"vote_average"`
+	VoteCount        int      `json:"vote_count"`
 }
 
 // {

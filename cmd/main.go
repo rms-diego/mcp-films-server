@@ -23,7 +23,7 @@ func main() {
 	s := gin.Default()
 	routes.Init(s, mcps)
 
-	addr := fmt.Sprintf(":%v", config.Cfg.PORT)
+	addr := fmt.Sprintf(":%v", config.Env.PORT)
 	if err := http.ListenAndServe(addr, s); err != nil {
 		panic(err)
 	}

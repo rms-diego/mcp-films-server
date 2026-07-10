@@ -7,8 +7,8 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
-func Init(r *gin.Engine, ms *mcp.Server) {
-	mcphandler := mcpHandler(ms)
+func Init(r *gin.Engine, mcps *mcp.Server) {
+	mcphandler := mcpHandler(mcps)
 
 	mcproutes := r.Group("/mcp")
 	mcproutes.GET("", func(c *gin.Context) {

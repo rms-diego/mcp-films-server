@@ -37,13 +37,8 @@ func Fetch[T any](payload Payload) (*T, error) {
 	}
 	defer res.Body.Close()
 
-	bytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
 	var data T
-	if err := json.Unmarshal(bytes, &data); err != nil {
+	if err := json.NewDecoder(res.Body).Decode(&data); err != nil {
 		return nil, err
 	}
 
@@ -51,10 +46,7 @@ func Fetch[T any](payload Payload) (*T, error) {
 }
 
 func formatRequest(payload Payload) (*http.Request, error) {
-	var bodyBytes []byte
-
-	var err error
-	bodyBytes, err = json.Marshal(payload.Body)
+	bodyBytes, err := json.Marshal(payload.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -69,8 +61,10 @@ func formatRequest(payload Payload) (*http.Request, error) {
 		return nil, err
 	}
 
-	for key, value := range payload.Headers {
-		req.Header.Set(key, value)
+	if len(payload.Headers) > 0 {
+		for key, value := range payload.Headers {
+			req.Header.Set(key, value)
+		}
 	}
 
 	return req, nil
