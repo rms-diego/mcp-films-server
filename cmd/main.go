@@ -21,7 +21,8 @@ func main() {
 	}, nil)
 
 	s := gin.Default()
-	routes.Init(s, mcps)
+	routes.Init(s)
+	routes.InitMCPRoutes(s, mcps)
 
 	addr := fmt.Sprintf(":%v", config.Env.PORT)
 	if err := http.ListenAndServe(addr, s); err != nil {
