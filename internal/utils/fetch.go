@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -24,8 +25,8 @@ type Payload struct {
 	Headers map[string]string
 }
 
-func Fetch[T any](payload Payload) (*T, error) {
-	req, err := formatRequest(payload)
+func Fetch[T any](ctx context.Context, payload Payload) (*T, error) {
+	req, err := formatRequest(ctx, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -45,18 +46,17 @@ func Fetch[T any](payload Payload) (*T, error) {
 	return &data, nil
 }
 
-func formatRequest(payload Payload) (*http.Request, error) {
-	bodyBytes, err := json.Marshal(payload.Body)
-	if err != nil {
-		return nil, err
-	}
-
+func formatRequest(ctx context.Context, payload Payload) (*http.Request, error) {
 	var body io.Reader
-	if bodyBytes != nil {
+	if payload.Body != nil {
+		bodyBytes, err := json.Marshal(payload.Body)
+		if err != nil {
+			return nil, err
+		}
 		body = bytes.NewReader(bodyBytes)
 	}
 
-	req, err := http.NewRequest(string(payload.Method), payload.Url, body)
+	req, err := http.NewRequestWithContext(ctx, string(payload.Method), payload.Url, body)
 	if err != nil {
 		return nil, err
 	}
