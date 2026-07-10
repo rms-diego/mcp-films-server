@@ -12,6 +12,7 @@ import (
 
 type ITMDBGateway interface {
 	FindMovieByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error)
+	FindSerieByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error)
 }
 
 type tMDBGateway struct {
@@ -31,10 +32,24 @@ func (s tMDBGateway) FindMovieByName(ctx context.Context, name string) (*model.S
 		Url:     consts.TMDB_API_URL + "/search/movie?query=" + name,
 		Headers: s.headers,
 		Method:  utils.GET,
-		Body:    nil,
 	}
 
 	r, err := utils.Fetch[model.SearchResult[model.Movie]](ctx, p)
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
+func (s tMDBGateway) FindSerieByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error) {
+	p := utils.Payload{
+		Url:     consts.TMDB_API_URL + "/search/tv?query=" + name,
+		Headers: s.headers,
+		Method:  utils.GET,
+	}
+
+	r, err := utils.Fetch[model.SearchResult[model.Serie]](ctx, p)
 	if err != nil {
 		return nil, err
 	}

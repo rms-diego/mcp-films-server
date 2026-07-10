@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -37,6 +38,13 @@ func Fetch[T any](ctx context.Context, payload Payload) (*T, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		var body any
+		json.NewDecoder(res.Body).Decode(&body)
+
+		return nil, fmt.Errorf("Something went wrong, please try later")
+	}
 
 	var data T
 	if err := json.NewDecoder(res.Body).Decode(&data); err != nil {
