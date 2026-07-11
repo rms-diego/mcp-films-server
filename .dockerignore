@@ -1,0 +1,17 @@
+# Secrets and local config
+.env
+.env.*
+
+# Git
+.git
+.gitignore
+
+# Build artifacts
+build/
+tmp/
+bin/
+
+# Docs
+*.md
+.air.toml
+.vscode/

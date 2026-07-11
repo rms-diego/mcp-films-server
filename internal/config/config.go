@@ -20,9 +20,7 @@ type env struct {
 var Env *env
 
 func Init() error {
-	if err := godotenv.Load(); err != nil {
-		return err
-	}
+	godotenv.Load()
 
 	switch {
 	case os.Getenv("TMDB_API_KEY") == "":
