@@ -33,10 +33,13 @@ cmd/main.go                     Ponto de entrada: carrega config, cria o MCP ser
 │   ├── <module>.go             Init: inicializa as dependências do módulo (registra rotas/tools, monta handlers, services e gateways)
 │   ├── handler/                Adapta a chamada MCP ou HTTP para o service
 │   ├── service/                Regra de negócio
-│   └── dto/                    Input/Output da tool/endpoint
+│   └── dto/                    Input/Output específicos do módulo (opcional)
+│
+├── internal/common             Código compartilhado entre módulos
+│   ├── dto/                    Input/Output reaproveitáveis por diferentes módulos
+│   └── model/                  Structs de domínio compartilhadas
 │
 ├── internal/gateway/<source>   Cliente de uma API externa (ex: tmdb), atrás de uma interface
-├── internal/model              Structs de domínio
 └── internal/utils              Helpers genéricos reutilizáveis (ex: cliente HTTP Fetch[T])
 ```
 

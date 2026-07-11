@@ -21,7 +21,7 @@ func NewMovieService(g tmdbgateway.ITMDBGateway) IMovieService {
 }
 
 func (s *movieService) FindMovieByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Movie, error) {
-	r, err := s.g.FindMovieByName(ctx, input.Name)
+	r, err := s.g.FindMoviesByName(ctx, input.Name)
 	if err != nil {
 		return nil, err
 	}

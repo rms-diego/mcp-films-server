@@ -27,7 +27,7 @@ type Payload struct {
 }
 
 func Fetch[T any](ctx context.Context, payload Payload) (*T, error) {
-	req, err := formatRequest(ctx, payload)
+	req, err := newRequest(ctx, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -40,8 +40,9 @@ func Fetch[T any](ctx context.Context, payload Payload) (*T, error) {
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		var body any
-		json.NewDecoder(res.Body).Decode(&body)
+		// TODO: handle error response body
+		// var body any
+		// json.NewDecoder(res.Body).Decode(&body)
 
 		return nil, fmt.Errorf("Something went wrong, please try later")
 	}
@@ -54,7 +55,7 @@ func Fetch[T any](ctx context.Context, payload Payload) (*T, error) {
 	return &data, nil
 }
 
-func formatRequest(ctx context.Context, payload Payload) (*http.Request, error) {
+func newRequest(ctx context.Context, payload Payload) (*http.Request, error) {
 	var body io.Reader
 	if payload.Body != nil {
 		bodyBytes, err := json.Marshal(payload.Body)

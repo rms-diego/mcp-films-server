@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	moviemodule "github.com/rms-diego/mcp-films-server/internal/modules/movie"
+	seriemodule "github.com/rms-diego/mcp-films-server/internal/modules/serie"
 )
 
 func InitMCPRoutes(s *gin.Engine, mcps *mcp.Server) {
@@ -24,6 +25,7 @@ func InitMCPRoutes(s *gin.Engine, mcps *mcp.Server) {
 	})
 
 	moviemodule.Init(mcps)
+	seriemodule.Init(mcps)
 }
 
 func mcpHandler(ms *mcp.Server) http.Handler {

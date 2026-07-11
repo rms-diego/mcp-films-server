@@ -11,8 +11,8 @@ import (
 )
 
 type ITMDBGateway interface {
-	FindMovieByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error)
-	FindSerieByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error)
+	FindMoviesByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error)
+	FindSeriesByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error)
 }
 
 type tMDBGateway struct {
@@ -27,7 +27,7 @@ func NewTMDBGateway() ITMDBGateway {
 	}
 }
 
-func (s tMDBGateway) FindMovieByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error) {
+func (s *tMDBGateway) FindMoviesByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error) {
 	p := utils.Payload{
 		Url:     consts.TMDB_API_URL + "/search/movie?query=" + name,
 		Headers: s.headers,
@@ -42,7 +42,7 @@ func (s tMDBGateway) FindMovieByName(ctx context.Context, name string) (*model.S
 	return r, nil
 }
 
-func (s tMDBGateway) FindSerieByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error) {
+func (s *tMDBGateway) FindSeriesByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error) {
 	p := utils.Payload{
 		Url:     consts.TMDB_API_URL + "/search/tv?query=" + name,
 		Headers: s.headers,

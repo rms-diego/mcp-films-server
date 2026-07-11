@@ -22,7 +22,7 @@ type IMovieHandler interface {
 }
 
 func NewMovieHandler(s movieservice.IMovieService) IMovieHandler {
-	return &movieHandler{s: s}
+	return &movieHandler{s}
 }
 
 func (h *movieHandler) FindMoviesByName(ctx context.Context, req *mcp.CallToolRequest, input commondto.FindByNameInput) (
@@ -30,10 +30,10 @@ func (h *movieHandler) FindMoviesByName(ctx context.Context, req *mcp.CallToolRe
 	*commondto.FindByNameOutput[model.Movie],
 	error,
 ) {
-	result, err := h.s.FindMovieByName(ctx, input)
+	r, err := h.s.FindMovieByName(ctx, input)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	return nil, &commondto.FindByNameOutput[model.Movie]{Data: result}, nil
+	return nil, &commondto.FindByNameOutput[model.Movie]{Data: r}, nil
 }
