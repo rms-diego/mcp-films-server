@@ -30,7 +30,7 @@ func (h *movieHandler) FindMoviesByName(ctx context.Context, req *mcp.CallToolRe
 	*commondto.FindByNameOutput[model.Movie],
 	error,
 ) {
-	r, err := h.s.FindMovieByName(ctx, input)
+	r, err := h.s.FindMoviesByName(ctx, input)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -97,13 +97,14 @@ make dev          # go run cmd/main.go
 Com hot reload (requer `air` instalado):
 
 ```bash
-make watch-dev    # air
+make dev-watch    # air
 ```
 
-### Build
+### Build e execução
 
 ```bash
-make build        # gera o binário em bin/app
+make build-app    # compila o binário em build/app
+make run-app      # executa o binário em build/app
 ```
 
 O servidor sobe em `http://localhost:8080` (ou na porta definida em `PORT`).

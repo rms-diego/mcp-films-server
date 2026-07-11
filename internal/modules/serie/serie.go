@@ -7,9 +7,8 @@ import (
 	serieservice "github.com/rms-diego/mcp-films-server/internal/modules/serie/service"
 )
 
-func Init(mcps *mcp.Server) {
-	g := tmdbgateway.NewTMDBGateway()
-	s := serieservice.NewSeriesService(g)
+func Init(mcps *mcp.Server, tmdbg tmdbgateway.ITMDBGateway) {
+	s := serieservice.NewSeriesService(tmdbg)
 	h := seriehandler.NewSerieHandler(s)
 
 	mcp.AddTool(

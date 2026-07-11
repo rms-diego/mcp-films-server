@@ -32,3 +32,5 @@ go.work.sum
 .vscode/
 tmp/*
 !tmp/.gitkeep
+build/*
+!build/.gitkeep

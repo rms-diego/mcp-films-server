@@ -1,8 +1,11 @@
-watch-dev:
+dev-watch:
 	air
 
 dev:
 	go run cmd/main.go
 
-build:
-	go build -o bin/app main.go
+build-app:
+	go build -o build/app cmd/main.go
+
+run-app:
+	./build/app

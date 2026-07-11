@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
+	tmdbgateway "github.com/rms-diego/mcp-films-server/internal/gateway/tmdb"
 	moviemodule "github.com/rms-diego/mcp-films-server/internal/modules/movie"
 	seriemodule "github.com/rms-diego/mcp-films-server/internal/modules/serie"
 )
@@ -24,8 +25,9 @@ func InitMCPRoutes(s *gin.Engine, mcps *mcp.Server) {
 		h.ServeHTTP(c.Writer, c.Request)
 	})
 
-	moviemodule.Init(mcps)
-	seriemodule.Init(mcps)
+	tmdbg := tmdbgateway.NewTMDBGateway()
+	moviemodule.Init(mcps, tmdbg)
+	seriemodule.Init(mcps, tmdbg)
 }
 
 func mcpHandler(ms *mcp.Server) http.Handler {

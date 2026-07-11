@@ -13,14 +13,14 @@ type movieService struct {
 }
 
 type IMovieService interface {
-	FindMovieByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Movie, error)
+	FindMoviesByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Movie, error)
 }
 
 func NewMovieService(g tmdbgateway.ITMDBGateway) IMovieService {
 	return &movieService{g}
 }
 
-func (s *movieService) FindMovieByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Movie, error) {
+func (s *movieService) FindMoviesByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Movie, error) {
 	r, err := s.g.FindMoviesByName(ctx, input.Name)
 	if err != nil {
 		return nil, err

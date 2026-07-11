@@ -10,13 +10,13 @@ import (
 	"github.com/rms-diego/mcp-films-server/internal/utils"
 )
 
+type tMDBGateway struct {
+	headers map[string]string
+}
+
 type ITMDBGateway interface {
 	FindMoviesByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error)
 	FindSeriesByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error)
-}
-
-type tMDBGateway struct {
-	headers map[string]string
 }
 
 func NewTMDBGateway() ITMDBGateway {
