@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/rms-diego/mcp-films-server/internal/common/model"
 	"github.com/rms-diego/mcp-films-server/internal/config"
 	"github.com/rms-diego/mcp-films-server/internal/consts"
-	"github.com/rms-diego/mcp-films-server/internal/model"
 	"github.com/rms-diego/mcp-films-server/internal/utils"
 )
 

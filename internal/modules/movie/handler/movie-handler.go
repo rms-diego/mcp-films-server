@@ -4,7 +4,8 @@ import (
 	"context"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	moviedto "github.com/rms-diego/mcp-films-server/internal/modules/movie/dto"
+	commondto "github.com/rms-diego/mcp-films-server/internal/common/dto"
+	"github.com/rms-diego/mcp-films-server/internal/common/model"
 	movieservice "github.com/rms-diego/mcp-films-server/internal/modules/movie/service"
 )
 
@@ -13,9 +14,9 @@ type movieHandler struct {
 }
 
 type IMovieHandler interface {
-	FindMovieByName(ctx context.Context, req *mcp.CallToolRequest, input moviedto.FindMovieByNameInput) (
+	FindMoviesByName(ctx context.Context, req *mcp.CallToolRequest, input commondto.FindByNameInput) (
 		*mcp.CallToolResult,
-		*moviedto.FindMovieByNameOutput,
+		*commondto.FindByNameOutput[model.Movie],
 		error,
 	)
 }
@@ -24,9 +25,9 @@ func NewMovieHandler(s movieservice.IMovieService) IMovieHandler {
 	return &movieHandler{s: s}
 }
 
-func (h *movieHandler) FindMovieByName(ctx context.Context, req *mcp.CallToolRequest, input moviedto.FindMovieByNameInput) (
+func (h *movieHandler) FindMoviesByName(ctx context.Context, req *mcp.CallToolRequest, input commondto.FindByNameInput) (
 	*mcp.CallToolResult,
-	*moviedto.FindMovieByNameOutput,
+	*commondto.FindByNameOutput[model.Movie],
 	error,
 ) {
 	result, err := h.s.FindMovieByName(ctx, input)
@@ -34,5 +35,5 @@ func (h *movieHandler) FindMovieByName(ctx context.Context, req *mcp.CallToolReq
 		return nil, nil, err
 	}
 
-	return nil, &moviedto.FindMovieByNameOutput{Films: result}, nil
+	return nil, &commondto.FindByNameOutput[model.Movie]{Data: result}, nil
 }

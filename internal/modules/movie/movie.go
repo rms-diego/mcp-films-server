@@ -12,5 +12,5 @@ func Init(mcps *mcp.Server) {
 	s := movieservice.NewMovieService(g)
 	h := moviehandler.NewMovieHandler(s)
 
-	mcp.AddTool(mcps, &mcp.Tool{Name: "Find films by name", Description: "A tool to find movies searching in TMDB api"}, h.FindMovieByName)
+	mcp.AddTool(mcps, &mcp.Tool{Name: "Find films by name", Description: "A tool to find movies searching in TMDB api"}, h.FindMoviesByName)
 }
