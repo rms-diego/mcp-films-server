@@ -9,19 +9,19 @@ import (
 )
 
 type seriesService struct {
-	g tmdbgateway.ITMDBGateway
+	g tmdbgateway.ITMDBGateway[model.Serie]
 }
 
 type ISeriesService interface {
 	FindSeriesByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Serie, error)
 }
 
-func NewSeriesService(g tmdbgateway.ITMDBGateway) ISeriesService {
+func NewSeriesService(g tmdbgateway.ITMDBGateway[model.Serie]) ISeriesService {
 	return &seriesService{g}
 }
 
 func (s *seriesService) FindSeriesByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Serie, error) {
-	r, err := s.g.FindSeriesByName(ctx, input.Name)
+	r, err := s.g.FindManyByName(ctx, input.Name)
 	if err != nil {
 		return nil, err
 	}

@@ -10,46 +10,47 @@ import (
 	"github.com/rms-diego/mcp-films-server/internal/utils"
 )
 
-type tMDBGateway struct {
-	headers map[string]string
+type entertainment string
+
+const (
+	movie entertainment = "movie"
+	tv    entertainment = "tv"
+)
+
+type tMDBGateway[T model.Movie | model.Serie] struct {
+	headers     map[string]string
+	gatewayType entertainment
 }
 
-type ITMDBGateway interface {
-	FindMoviesByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error)
-	FindSeriesByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error)
+type ITMDBGateway[T model.Movie | model.Serie] interface {
+	FindManyByName(ctx context.Context, name string) (*model.SearchResult[T], error)
 }
 
-func NewTMDBGateway() ITMDBGateway {
-	return &tMDBGateway{
-		headers: map[string]string{
-			"Authorization": fmt.Sprintf("Bearer %v", config.Env.TMDBConfig.ReadAccessToken),
-		},
+func NewTMDBGateway[T model.Movie | model.Serie]() ITMDBGateway[T] {
+	var selType T
+	var gatewayType entertainment
+
+	switch any(selType).(type) {
+	case model.Movie:
+		gatewayType = movie
+	case model.Serie:
+		gatewayType = tv
+	}
+
+	return &tMDBGateway[T]{
+		headers:     map[string]string{"Authorization": fmt.Sprintf("Bearer %v", config.Env.TMDBConfig.ReadAccessToken)},
+		gatewayType: gatewayType,
 	}
 }
 
-func (s *tMDBGateway) FindMoviesByName(ctx context.Context, name string) (*model.SearchResult[model.Movie], error) {
+func (s *tMDBGateway[T]) FindManyByName(ctx context.Context, name string) (*model.SearchResult[T], error) {
 	p := utils.Payload{
-		Url:     consts.TMDB_API_URL + "/search/movie?query=" + name,
+		Url:     fmt.Sprintf("%v/search/%v?query=%v", consts.TMDB_API_URL, string(s.gatewayType), name),
 		Headers: s.headers,
 		Method:  utils.GET,
 	}
 
-	r, err := utils.Fetch[model.SearchResult[model.Movie]](ctx, p)
-	if err != nil {
-		return nil, err
-	}
-
-	return r, nil
-}
-
-func (s *tMDBGateway) FindSeriesByName(ctx context.Context, name string) (*model.SearchResult[model.Serie], error) {
-	p := utils.Payload{
-		Url:     consts.TMDB_API_URL + "/search/tv?query=" + name,
-		Headers: s.headers,
-		Method:  utils.GET,
-	}
-
-	r, err := utils.Fetch[model.SearchResult[model.Serie]](ctx, p)
+	r, err := utils.Fetch[model.SearchResult[T]](ctx, p)
 	if err != nil {
 		return nil, err
 	}

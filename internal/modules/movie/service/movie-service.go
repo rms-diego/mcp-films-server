@@ -9,19 +9,19 @@ import (
 )
 
 type movieService struct {
-	g tmdbgateway.ITMDBGateway
+	g tmdbgateway.ITMDBGateway[model.Movie]
 }
 
 type IMovieService interface {
 	FindMoviesByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Movie, error)
 }
 
-func NewMovieService(g tmdbgateway.ITMDBGateway) IMovieService {
+func NewMovieService(g tmdbgateway.ITMDBGateway[model.Movie]) IMovieService {
 	return &movieService{g}
 }
 
 func (s *movieService) FindMoviesByName(ctx context.Context, input commondto.FindByNameInput) ([]model.Movie, error) {
-	r, err := s.g.FindMoviesByName(ctx, input.Name)
+	r, err := s.g.FindManyByName(ctx, input.Name)
 	if err != nil {
 		return nil, err
 	}
