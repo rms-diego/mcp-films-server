@@ -10,16 +10,16 @@ import (
 	"github.com/rms-diego/mcp-films-server/internal/utils"
 )
 
-type entertainment string
+type searchType string
 
 const (
-	movie entertainment = "movie"
-	tv    entertainment = "tv"
+	movie searchType = "movie"
+	tv    searchType = "tv"
 )
 
 type tMDBGateway[T model.Movie | model.Serie] struct {
 	headers     map[string]string
-	gatewayType entertainment
+	gatewayType searchType
 }
 
 type ITMDBGateway[T model.Movie | model.Serie] interface {
@@ -28,7 +28,7 @@ type ITMDBGateway[T model.Movie | model.Serie] interface {
 
 func NewTMDBGateway[T model.Movie | model.Serie]() ITMDBGateway[T] {
 	var selType T
-	var gatewayType entertainment
+	var gatewayType searchType
 
 	switch any(selType).(type) {
 	case model.Movie:
@@ -38,7 +38,9 @@ func NewTMDBGateway[T model.Movie | model.Serie]() ITMDBGateway[T] {
 	}
 
 	return &tMDBGateway[T]{
-		headers:     map[string]string{"Authorization": fmt.Sprintf("Bearer %v", config.Env.TMDBConfig.ReadAccessToken)},
+		headers: map[string]string{
+			"Authorization": fmt.Sprintf("Bearer %v", config.Env.TMDBConfig.ReadAccessToken),
+		},
 		gatewayType: gatewayType,
 	}
 }

@@ -12,11 +12,11 @@ import (
 type method string
 
 const (
-	GET    method = "GET"
-	POST   method = "POST"
-	PUT    method = "PUT"
-	PATCH  method = "PATCH"
-	DELETE method = "DELETE"
+	GET    method = http.MethodGet
+	POST   method = http.MethodPost
+	PUT    method = http.MethodPut
+	PATCH  method = http.MethodPatch
+	DELETE method = http.MethodDelete
 )
 
 type Payload struct {
